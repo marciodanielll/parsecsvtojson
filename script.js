@@ -1,22 +1,40 @@
 function parseCsvForJson(str) {
-  const result = str.split('\n').reduce((acc, row, index, arr) => {
-    if (index === 0) return acc;
-    acc.push({ [arr[0]]: row });
-    return acc;
-  }, []);
-  const json = document.getElementById('json');
-  json.value = JSON.stringify(result);
+  if (str.length === 0 || str === '  ') {
+    const body = document.getElementById('body');
+    const dialog = document.createElement('dialog');
+    dialog.id = 'dialog';
+    const p = document.createElement('p');
+    p.innerText = 'Valor inválido';
+    dialog.appendChild(p);
+    const resetButton = document.createElement('button');
+    resetButton.innerText = 'OK';
+    resetButton.addEventListener('click', () => {
+      console.log('clicked');
+      dialog.close();
+    });
+    dialog.appendChild(resetButton);
+    body.appendChild(dialog);
+    dialog.showModal();
+  } else {
+    const result = str.split('\n').reduce((acc, row, index, arr) => {
+      if (index === 0) return acc;
+      acc.push({ [arr[0]]: row });
+      return acc;
+    }, []);
+    const json = document.getElementById('json');
+    json.value = JSON.stringify(result);
+  }
 }
 
-function createEventButtoConverter() {
-  const buttoConverter = document.getElementById('converter');
-  buttoConverter.addEventListener('click', () => {
+function createEventButtonConverter() {
+  const buttonConverter = document.getElementById('converter');
+  buttonConverter.addEventListener('click', () => {
     const textArea = document.getElementById('csv').value;
     parseCsvForJson(textArea);
   });
 }
 
-function creatreVentButtoDownload() {
+function createEventButtonDownload() {
   const buttonDownload = document.getElementById('download');
   buttonDownload.addEventListener('click', (event) => {
     event.preventDefault();
@@ -33,6 +51,6 @@ function creatreVentButtoDownload() {
 }
 
 window.onload = () => {
-  createEventButtoConverter();
-  creatreVentButtoDownload();
+  createEventButtonConverter();
+  createEventButtonDownload();
 }
